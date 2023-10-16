@@ -7,6 +7,7 @@ import MultiRow from 'components/MultiRow'
 import MultiSelect from 'components/MultiSelect'
 import PowerInput from 'components/PowerInput'
 import TextField from 'components/TextField'
+import TiptapEditor from 'components/TiptapEditor'
 import useDynamicData from 'hooks/useDynamicData'
 
 export type InputCreatorProps = {
@@ -70,6 +71,10 @@ export default function InputCreator(
         label={label}
       />
     )
+  }
+
+  if (type === 'rich-text') {
+    return <TiptapEditor />
   }
 
   if (type === 'string' || type === 'multiline') {

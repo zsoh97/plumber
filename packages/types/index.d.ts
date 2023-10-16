@@ -195,6 +195,11 @@ export interface IFieldText extends IBaseField {
   autoComplete?: AutoCompleteValue
 }
 
+export interface IFieldRichText extends IBaseField {
+  type: 'rich-text'
+  value?: string
+}
+
 export interface IFieldMultiline extends IBaseField {
   type: 'multiline'
   value?: string
@@ -223,6 +228,7 @@ export type IField =
   | IFieldMultiline
   | IFieldMultiSelect
   | IFieldMultiRow
+  | IFieldRichText
 
 export interface IAuthenticationStepField {
   name: string
