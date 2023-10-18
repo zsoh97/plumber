@@ -110,17 +110,6 @@ const menuButtons = [
     isActive: (editor: Editor) => editor.isActive('orderedList'),
   },
   {
-    label: 'Add Image',
-    icon: 'image-fill',
-    onClick: (editor: Editor) => {
-      const url = window.prompt('URL')
-      if (url === null) {
-        return
-      }
-      editor.chain().focus().setImage({ src: url }).run()
-    },
-  },
-  {
     label: 'divider',
   },
   {

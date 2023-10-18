@@ -74,7 +74,14 @@ export default function InputCreator(
   }
 
   if (type === 'rich-text') {
-    return <TiptapEditor />
+    return (
+      <TiptapEditor
+        name={computedName}
+        required={required}
+        label={label}
+        description={description}
+      />
+    )
   }
 
   if (type === 'string' || type === 'multiline') {

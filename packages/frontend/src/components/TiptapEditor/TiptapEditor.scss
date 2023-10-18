@@ -167,6 +167,9 @@
     p {
       margin: 0;
     }
+    span.variable {
+      color: red;
+    }
   }
 
   &:focus-visible {
