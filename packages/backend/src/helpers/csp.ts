@@ -11,6 +11,7 @@ const helmetOptions: HelmetOptions = {
       connectSrc: [
         "'self'",
         // For Datadog RUM
+        'https://browser-intake-datadoghq.com',
         'https://*.browser-intake-datadoghq.com',
         // Launch Darkly feature flags
         'https://*.launchdarkly.com',
