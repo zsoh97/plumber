@@ -35,6 +35,7 @@ type Query {
   ): JSONObject
   getCurrentUser: User
   healthcheck: AppHealth
+  getPlumberStats: Stats
 }
 
 type Mutation {
@@ -505,6 +506,11 @@ type ExecutionStepConnection {
 
 type AppHealth {
   version: String
+}
+
+type Stats {
+  userCount: Int
+  executionCount: Int
 }
 
 type SgidPublicOfficerEmployment {

@@ -57,6 +57,7 @@ const authentication = shield(
       '*': isAuthenticated,
       healthcheck: allow,
       getCurrentUser: allow,
+      getPlumberStats: allow,
     },
     Mutation: {
       '*': isAuthenticated,
