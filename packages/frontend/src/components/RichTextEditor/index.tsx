@@ -35,6 +35,7 @@ interface EditorProps {
   editable?: boolean
   placeholder?: string
   variablesEnabled?: boolean
+  isRich?: boolean
 }
 const Editor = ({
   onChange,
@@ -42,6 +43,7 @@ const Editor = ({
   editable,
   placeholder,
   variablesEnabled,
+  isRich,
 }: EditorProps) => {
   const priorStepsWithExecutions = useContext(StepExecutionsContext)
   const [showVarSuggestions, setShowVarSuggestions] = useState(false)
@@ -57,7 +59,11 @@ const Editor = ({
   }, [priorStepsWithExecutions])
 
   const extensions: Array<any> = [
-    StarterKit,
+    StarterKit.configure({
+      paragraph: {
+        HTMLAttributes: { style: 'margin: 0' },
+      },
+    }),
     Link.configure({
       HTMLAttributes: { rel: null, target: '_blank' },
     }),
@@ -72,7 +78,8 @@ const Editor = ({
     TableHeader,
     TableCell.configure({
       HTMLAttributes: {
-        style: 'border:1px solid black;',
+        style:
+          'border:1px solid black;padding: 5px 10px;min-width: 100px;height: 15px;',
       },
     }),
     Placeholder.configure({
@@ -92,8 +99,7 @@ const Editor = ({
     extensions,
     content,
     onUpdate: ({ editor }) => {
-      const content = editor.getHTML()
-      if (content === '<p></p>') {
+      if (editor.isEmpty) {
         // this is when content of the editor is empty
         // set controller value to empty string instead so the required rule can
         // work properly
@@ -101,7 +107,7 @@ const Editor = ({
         return
       }
 
-      onChange(content)
+      onChange(editor.getHTML())
     },
     editable,
   })
@@ -133,7 +139,7 @@ const Editor = ({
         onClickAway={() => setShowVarSuggestions(false)}
       >
         <div ref={editorRef}>
-          <MenuBar editor={editor} />
+          {isRich && <MenuBar editor={editor} />}
           <EditorContent
             className="editor__content"
             editor={editor}
@@ -195,6 +201,7 @@ const RichTextEditor = ({
             editable={!disabled}
             placeholder={placeholder}
             variablesEnabled={variablesEnabled}
+            isRich
           />
         )}
       />
@@ -202,4 +209,5 @@ const RichTextEditor = ({
   )
 }
 
+export const BareEditor = Editor
 export default RichTextEditor

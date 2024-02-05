@@ -2,11 +2,6 @@ import { IGlobalVariable, IRawTrigger } from '@plumber/types'
 
 import isEmpty from 'lodash/isEmpty'
 
-import {
-  registerWebhookUrl,
-  verifyWebhookUrl,
-} from '../../common/webhook-settings'
-
 import getDataOutMetadata from './get-data-out-metadata'
 
 export const NricFilter = {
@@ -20,7 +15,7 @@ const trigger: IRawTrigger = {
   name: 'New form submission',
   key: 'newSubmission',
   type: 'webhook',
-  description: 'Triggers when the webhook receives a request.',
+  description: 'Triggers when a new form submission is received',
   webhookTriggerInstructions: {
     beforeUrlMsg: `# Make a new submission to the form you connected. Then, click test step.`,
     hideWebhookUrl: true,
@@ -59,8 +54,6 @@ const trigger: IRawTrigger = {
   ],
 
   getDataOutMetadata,
-  registerHook: registerWebhookUrl,
-  verifyHook: verifyWebhookUrl,
 
   async testRun($: IGlobalVariable) {
     const lastExecutionStep = await $.getLastExecutionStep()

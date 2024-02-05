@@ -3,7 +3,7 @@ import { IJSONArray, IRawAction } from '@plumber/types'
 import { SafeParseError } from 'zod'
 import { fromZodError } from 'zod-validation-error'
 
-import { generateStepError } from '@/helpers/generate-step-error'
+import StepError from '@/errors/step'
 import { getObjectFromS3Id } from '@/helpers/s3'
 import Step from '@/models/step'
 
@@ -19,7 +19,7 @@ import { throwSendEmailError } from '../../common/throw-errors'
 const action: IRawAction = {
   name: 'Send email',
   key: 'sendTransactionalEmail',
-  description: "Sends an email using Postman's transactional API.",
+  description: 'Sends an email with Postman',
   arguments: transactionalEmailFields,
   doesFileProcessing: (step: Step) => {
     return (
@@ -62,7 +62,8 @@ const action: IRawAction = {
       const stepErrorSolution = isAttachmentNotStoredError
         ? 'This attachment was not stored in the last submission. Please make a new submission with attachments to successfully configure this pipe.'
         : 'Click on set up action and reconfigure the invalid field.'
-      throw generateStepError(
+
+      throw new StepError(
         stepErrorName,
         stepErrorSolution,
         $.step.position,
@@ -86,7 +87,12 @@ const action: IRawAction = {
     try {
       results = await sendTransactionalEmails($.http, recipients, {
         subject: result.data.subject,
-        body: result.data.body,
+        // this is to make sure there's at least some content for every new line
+        // so on the email client the new line will have some height and show up
+        body: result.data.body.replace(
+          /(<p\s?((style=")([a-zA-Z0-9:;.\s()\-,]*)("))?>)\s*(<\/p>)/g,
+          '<p style="margin: 0">&nbsp;</p>',
+        ),
         replyTo: result.data.replyTo,
         senderName: result.data.senderName,
         attachments: attachmentFiles,
