@@ -124,6 +124,22 @@ worker.on('failed', async (job, err) => {
       job: job.data,
     },
   )
+
+  if (
+    !(err instanceof UnrecoverableError) &&
+    job.attemptsMade < MAXIMUM_JOB_ATTEMPTS
+  ) {
+    const span = tracer.scope().active()
+    span?.addTags({
+      will_retry: true,
+    })
+    logger.info(`Will retry flow: ${job.data.flowId}`, {
+      job: job.data,
+      error: err,
+      attempt: job.attemptsMade + 1,
+    })
+  }
+
   const isEmailSent = await checkErrorEmail(job.data.flowId)
   if (isEmailSent) {
     return
